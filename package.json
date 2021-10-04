@@ -1,0 +1,18 @@
+{
+  "name": "kickoff-color-picker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "create-migration": "knex migrate:make",
+    "run-migrations": "knex migrate:latest"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "knex": "^0.21.17",
+    "next": "10.0.6",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "sqlite3": "^5.0.1"
+  }
+}
