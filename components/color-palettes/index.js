@@ -16,24 +16,32 @@ const ColorPalette = () => {
     const { status, data } = await axios.get("/api/color-palettes");
 
     if (status === 200) {
-      setColorPalettes(data);
+      const newPalettes = [
+        ...data.sort((a, b) => { return a.id - b.id; })
+      ];
+      setColorPalettes(newPalettes);
     } else {
       throw new Error("Error while getting color palettes.");
     }
   };
 
-  const handlePaletteChange = async (color, index) => {
-    const { status, data } = await axios.put("/api/color-palettes", {
-      ...colorPalettes[index], hex_color: color.hex
+  const handlePaletteChange = (color, index) => {
+    const newPalettes = [...colorPalettes];
+    newPalettes[index].hex_color = color.hex;
+
+    setColorPalettes(
+      newPalettes
+    );
+  }
+
+  const handlePaletteChangeComplete = async (color, index) => {
+    const { status } = await axios.put("/api/color-palettes", {
+      ...colorPalettes[index],
+      hex_color: color.hex
     });
 
     if (status === 200) {
-      const newPalettes = [
-        ...colorPalettes.filter((item, i) => { return i !== index }),
-        data
-      ];
-
-      setColorPalettes(newPalettes);
+      handlePaletteChange(color, index);
     } else {
       throw new Error("Error while updating color palette.");
     }
@@ -47,9 +55,8 @@ const ColorPalette = () => {
     });
 
     if (status === 204) {
-      const newPalettes = [
-        ...colorPalettes.filter((item, i) => { return i !== index })
-      ];
+      const newPalettes = [...colorPalettes];
+      newPalettes.splice(index, 1);
 
       setColorPalettes(newPalettes);
     } else {
@@ -73,14 +80,10 @@ const ColorPalette = () => {
     }
   }
 
-  const sortedPalettes = colorPalettes
-    .sort((a, b) => { return a.id - b.id; })
-    .map(c => { return c.hex_color; });
-
   return (
     <div className={s.colorPaletteContainer}>
       {
-        sortedPalettes && sortedPalettes.map((color, index) => {
+        colorPalettes && colorPalettes.map((item, index) => {
           const customPickerStyle = {
             colorWrapper: {
               display: 'inline-block',
@@ -92,7 +95,7 @@ const ColorPalette = () => {
               height: '175px',
               borderRadius: '4px',
               border: '1px solid #d6d6d6',
-              background: `${color}`,
+              background: `${item.hex_color}`,
               margin: '1px',
             },
           };
@@ -101,8 +104,9 @@ const ColorPalette = () => {
             <div key={index}>
               <ColorPicker
                 key={index}
-                color={{ hex: color }}
-                onChange={(color) => handlePaletteChange(color, index)}
+                color={{ hex: item.hex_color }}
+                onChange={(item) => handlePaletteChange(item, index)}
+                onChangeComplete={(item) => handlePaletteChangeComplete(item, index)}
                 style={customPickerStyle} />
               <FaRegTrashAlt
                 onClick={() => handlePaletteDelete(index)}
@@ -112,11 +116,11 @@ const ColorPalette = () => {
         })
       }
       {
-        sortedPalettes && sortedPalettes.length < 5 &&
+        colorPalettes && colorPalettes.length < 5 &&
         <FaPlus onClick={handlePaletteAdd} className={s.plusIcon} size={19} />
       }
       {
-        sortedPalettes && sortedPalettes.length <= 0 &&
+        colorPalettes && colorPalettes.length <= 0 &&
         <div onClick={handlePaletteAdd} className={s.plusIcon}> Add Color Palette</div>
       }
     </div>

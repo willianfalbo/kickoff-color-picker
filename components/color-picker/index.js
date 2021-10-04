@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import reactCSS from 'reactcss'
 import { SketchPicker, CustomPicker } from 'react-color'
 
-const ColorPicker = ({ hex, onChange, style }) => {
+const ColorPicker = ({ hex, onChange, onChangeComplete, style }) => {
   const [colorState, setColorState] = useState({ hex, ready: false });
 
   const handleClick = () => {
@@ -15,7 +15,14 @@ const ColorPicker = ({ hex, onChange, style }) => {
 
   const handleChange = (input) => {
     setColorState({ ...colorState, hex: input.hex });
-    onChange(input);
+
+    if (onChange)
+      onChange(input);
+  }
+
+  const handleChangeComplete = (input) => {
+    if (onChangeComplete)
+      onChangeComplete(input);
   }
 
   const defaultStyles = reactCSS({
@@ -61,6 +68,7 @@ const ColorPicker = ({ hex, onChange, style }) => {
           <SketchPicker
             color={colorState.hex}
             onChange={handleChange}
+            onChangeComplete={handleChangeComplete}
             disableAlpha={true}
             presetColors={[]} />
         </div>
