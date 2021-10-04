@@ -47,8 +47,10 @@
   background-color: #830051;
   border-color: #830051;
   color: white;
+  cursor: pointer;
 }
 
 .button:disabled {
   opacity: 0.4;
+  cursor: default;
 }

@@ -1,0 +1,12 @@
+.colorPaletteContainer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.plusIcon {
+  cursor: pointer;
+  margin-top: -15px;
+}
