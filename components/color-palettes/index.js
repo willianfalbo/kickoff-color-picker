@@ -29,9 +29,7 @@ const ColorPalette = () => {
     const newPalettes = [...colorPalettes];
     newPalettes[index].hex_color = color.hex;
 
-    setColorPalettes(
-      newPalettes
-    );
+    setColorPalettes(newPalettes);
   }
 
   const handlePaletteChangeComplete = async (color, index) => {
